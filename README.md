@@ -2,7 +2,8 @@ This PowerShell module allows system administrators to retreive and display info
 
 Syntax: get-systeminfo `<name>` or get-systeminfo `<ipaddress>`
 
-Information Displayed  
+The script will retreive and display the following information:  
+  
 Name  
 Model  
 Serial  
