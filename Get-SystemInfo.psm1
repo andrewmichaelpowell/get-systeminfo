@@ -43,7 +43,7 @@ Function Get-SystemInfo{
         $TPMVersion = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Class Win32_TPM -Namespace "root\CIMV2\Security\MicrosoftTpm" | Select-Object -Property SpecVersion
 	$SystemRestore = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Namespace "root\default" -Class SystemRestoreConfig | Select-Object -Property RPSessionInterval
 
-        If ($LastUser.IndexOf(".") -gt 0){
+        If($LastUser.IndexOf(".") -gt 0){
             $LastUser = $LastUser.Substring(0, $LastUser.IndexOf("."))
         }
 
@@ -209,7 +209,7 @@ Function Get-SystemInfo{
         Write-Host -ForegroundColor Cyan "MAC Addresses"
         Write-Host ""
 
-        ForEach ($MAC in $MAC){
+        ForEach($MAC in $MAC){
           Write-Host -NoNewLine $MAC.MacAddress
           Write-Host -NoNewLine -ForegroundColor Red " : "
           Write-Host -ForegroundColor White $MAC.Description
