@@ -1,8 +1,8 @@
-# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-# +  Get-SystemInfo                                          +
-# +  Author: Andrew Powell <andrewmichaelpowell@icloud.com>  +
-# +  Last Update: 07/22/2021                                 +
-# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# +++++++++++++++++++++++++++++++++++
+# +  Get-SystemInfo                 +
+# +  Author: Andrew Powell          +
+# +  github.com/andrewmichaelpowell +
+# +++++++++++++++++++++++++++++++++++
 
 If(-Not(Get-Module -Name "ActiveDirectory")){
   If(Get-Module -ListAvailable -Name "ActiveDirectory"){
