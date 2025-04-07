@@ -1,8 +1,8 @@
-# +++++++++++++++++++++++++++++++++++
-# +  Get-SystemInfo                 +
-# +  Author: Andrew Powell          +
-# +  github.com/andrewmichaelpowell +
-# +++++++++++++++++++++++++++++++++++
+# ++++++++++++++++++++++++++++++++++++
+# +  Get-SystemInfo                  +
+# +  Author: Andrew Powell           +
+# +  github.com/andrewmichaelpowell  +
+# ++++++++++++++++++++++++++++++++++++
 
 If(-Not(Get-Module -Name "ActiveDirectory")){
   If(Get-Module -ListAvailable -Name "ActiveDirectory"){
