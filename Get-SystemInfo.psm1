@@ -35,7 +35,7 @@ Function Get-SystemInfo{
         $OS = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Class Win32_OperatingSystem | Select-Object -Property Caption,OSArchitecture
         $Key = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Query 'Select * From SoftwareLicensingService' | Select-Object -Property OA3xOriginalProductKey
         $Cores = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Class Win32_Processor | Select-Object -Property NumberOfCores
-        $LastUser = ((Get-ChildItem \\$Computer\C$\Users -Exclude "Administrator","xAdministrator","Default","DeployAcctSvc","Public","Temp","POSadminsvc","PDQadmin","defaultuser0" | Sort-Object -Property LastWriteTime -Descending | Select-Object -Property Name -First 1).Name).ToLower()
+        $LastUser = ((Get-ChildItem \\$Computer\C$\Users -Exclude "Administrator","Default","Public" | Sort-Object -Property LastWriteTime -Descending | Select-Object -Property Name -First 1).Name).ToLower()
         $BitlockerPercentRaw = Invoke-Command -ErrorAction Stop -ScriptBlock {manage-bde -ComputerName $Computer -Status c:} | Select-Object -First 12 | Select-Object -Skip 11
         $BitlockerPercent = $BitlockerPercentRaw.Substring(($BitlockerPercentRaw.IndexOf(":") + 2) , ($BitlockerPercentRaw.IndexOf("%") - ($BitLockerPercentRaw.IndexOf(":") + 1)))
         $BitlockerStatusRaw = Invoke-Command -ErrorAction Stop -ScriptBlock {manage-bde -ComputerName $Computer -Status c:} | Select-Object -First 14 | Select-Object -Skip 13
