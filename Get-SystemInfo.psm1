@@ -1,6 +1,5 @@
 # ++++++++++++++++++++++++++++++++++++
 # +  Get-SystemInfo                  +
-# +  Author: Andrew Powell           +
 # +  github.com/andrewmichaelpowell  +
 # ++++++++++++++++++++++++++++++++++++
 
