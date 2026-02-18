@@ -40,7 +40,7 @@ Function Get-SystemInfo{
         $BitlockerStatusRaw = Invoke-Command -ErrorAction Stop -ScriptBlock {manage-bde -ComputerName $Computer -Status c:} | Select-Object -First 14 | Select-Object -Skip 13
         $BitlockerStatus = $BitlockerStatusRaw.Substring(($BitlockerStatusRaw.IndexOf(":") + 16) , ($BitlockerStatusRaw.Length - ($BitlockerStatusRaw.IndexOf(":") + 16)))
         $TPMVersion = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Class Win32_TPM -Namespace "root\CIMV2\Security\MicrosoftTpm" | Select-Object -Property SpecVersion
-	$SystemRestore = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Namespace "root\default" -Class SystemRestoreConfig | Select-Object -Property RPSessionInterval
+        $SystemRestore = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Namespace "root\default" -Class SystemRestoreConfig | Select-Object -Property RPSessionInterval
 
         If($LastUser.IndexOf(".") -gt 0){
             $LastUser = $LastUser.Substring(0, $LastUser.IndexOf("."))
@@ -336,3 +336,4 @@ Function Get-SystemInfo{
     }
   }
 }
+
