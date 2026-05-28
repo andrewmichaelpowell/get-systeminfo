@@ -1,32 +1,40 @@
 # Get-SystemInfo
 # github.com/andrewmichaelpowell
 
-If(-Not(Get-Module -Name "ActiveDirectory")){
-  If(Get-Module -ListAvailable -Name "ActiveDirectory"){
+If(-Not(Get-Module -Name "ActiveDirectory"))
+{
+  If(Get-Module -ListAvailable -Name "ActiveDirectory")
+  {
     Import-Module -Name "ActiveDirectory"
     $RSAT = 1
   }
 
-  Else{
+  Else
+  {
     $RSAT = 0
   }
 }
 
-Else{
+Else
+{
   $RSAT = 1
 }
 
-Function Get-SystemInfo{
+Function Get-SystemInfo
+{
   Param(
     [Parameter(Mandatory="True")]
     [String]$Computer
   )
 
-  If(Test-Connection -ComputerName $Computer -Count 1 -Quiet){
-    Try{
+  If(Test-Connection -ComputerName $Computer -Count 1 -Quiet)
+  {
+    Try
+    {
       $IP = Resolve-DNSName -ErrorAction Stop -Name $Computer | Select -Property IPAddress,NameHost
 
-      Try{
+      Try
+      {
         $Model = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Class Win32_ComputerSystem | Select-Object -Property Model
         $Serial = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Class Win32_BIOS | Select-Object -Property SerialNumber
         $OS = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Class Win32_OperatingSystem | Select-Object -Property Caption,OSArchitecture
@@ -40,16 +48,20 @@ Function Get-SystemInfo{
         $TPMVersion = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Class Win32_TPM -Namespace "root\CIMV2\Security\MicrosoftTpm" | Select-Object -Property SpecVersion
         $SystemRestore = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Namespace "root\default" -Class SystemRestoreConfig | Select-Object -Property RPSessionInterval
 
-        If($LastUser.IndexOf(".") -gt 0){
+        If($LastUser.IndexOf(".") -gt 0)
+        {
             $LastUser = $LastUser.Substring(0, $LastUser.IndexOf("."))
         }
 
-        If($RSAT -eq 1){
-          Try{
+        If($RSAT -eq 1)
+        {
+          Try
+          {
             $LastUser = Get-ADUser -Identity $LastUser -Property * | Select-Object -Property Name,Department,Office,OfficePhone,EmailAddress
           }
 
-          Catch{
+          Catch
+          {
           }
         }
 
@@ -61,16 +73,20 @@ Function Get-SystemInfo{
         Write-Host ""
         Write-Host -NoNewLine "Name".PadRight(17)
         Write-Host -NoNewLine -ForegroundColor Red " : "
-        If($IP.IPAddress){
+        If($IP.IPAddress)
+        {
           Write-Host -ForegroundColor White $Computer.ToLower()
         }
 
-        Else{
-          If(($IP.NameHost).IndexOf(".") -gt 0){
+        Else
+        {
+          If(($IP.NameHost).IndexOf(".") -gt 0)
+          {
             Write-Host -ForegroundColor White (($IP.NameHost).Substring(0, ($IP.NameHost).IndexOf("."))).ToLower()
           }
 
-          Else{
+          Else
+          {
             Write-Host -ForegroundColor White ($IP.NameHost).ToLower()
           }
         }
@@ -78,11 +94,13 @@ Function Get-SystemInfo{
         Write-Host -NoNewLine "IP".PadRight(17)
         Write-Host -NoNewLine -ForegroundColor Red " : "
 
-        If($IP.IPAddress){
+        If($IP.IPAddress)
+        {
           Write-Host -ForegroundColor White $IP.IPAddress
         }
 
-        Else{
+        Else
+        {
           Write-Host -ForegroundColor White $Computer.ToLower()
         }
 
@@ -98,11 +116,13 @@ Function Get-SystemInfo{
         Write-Host -NoNewLine "Product Key".PadRight(17)
         Write-Host -NoNewLine -ForegroundColor Red " : "
 
-        If($Key.OA3xOriginalProductKey){
+        If($Key.OA3xOriginalProductKey)
+        {
           Write-Host -ForegroundColor White $Key.OA3xOriginalProductKey
         }
 
-        Else{
+        Else
+        {
           Write-Host -ForegroundColor White "N/A"
         }
 
@@ -118,83 +138,99 @@ Function Get-SystemInfo{
         Write-Host -NoNewLine "TPM Version".PadRight(17)
         Write-Host -NoNewLine -ForegroundColor Red " : "
 
-        If($TPMVersion.SpecVersion){
+        If($TPMVersion.SpecVersion)
+        {
           Write-Host -ForegroundColor White ($TPMVersion.SpecVersion).Substring(0,3)
         }
 
-        Else{
+        Else
+        {
           Write-Host -ForegroundColor White "N/A"
         }
 
         Write-Host -NoNewLine "System Restore".PadRight(17)
         Write-Host -NoNewLine -ForegroundColor Red " : "
 
-        If($SystemRestore.RPSessionInterval -eq 0){
+        If($SystemRestore.RPSessionInterval -eq 0)
+        {
           Write-Host -ForegroundColor White "Off"
         }
 
-        Else{
+        Else
+        {
           Write-Host -ForegroundColor White "On"
         }
 
-        If($RSAT -eq 1){
+        If($RSAT -eq 1)
+        {
           Write-Host -NoNewLine "Last User".PadRight(17)
           Write-Host -NoNewLine -ForegroundColor Red " : "
 
-          If($LastUser.Name){
+          If($LastUser.Name)
+          {
             Write-Host -ForegroundColor White $LastUser.Name
           }
 
-          Else{
+          Else
+          {
             Write-Host -ForegroundColor White "$LastUser"
           }
 
           Write-Host -NoNewLine "Location".PadRight(17)
           Write-Host -NoNewLine -ForegroundColor Red " : "
 
-          If($LastUser.Office){
+          If($LastUser.Office)
+          {
             Write-Host -ForegroundColor White $LastUser.Office
           }
 
-          Else{
+          Else
+          {
             Write-Host -ForegroundColor White "N/A"
           }
 
           Write-Host -NoNewLine "Department".PadRight(17)
           Write-Host -NoNewLine -ForegroundColor Red " : "
 
-          If($LastUser.Department){
+          If($LastUser.Department)
+          {
             Write-Host -ForegroundColor White $LastUser.Department
           }
 
-          Else{
+          Else
+          {
             Write-Host -ForegroundColor White "N/A"
           }
 
           Write-Host -NoNewLine "Phone".PadRight(17)
           Write-Host -NoNewLine -ForegroundColor Red " : "
 
-          If($LastUser.OfficePhone){
+          If($LastUser.OfficePhone)
+          {
             Write-Host -ForegroundColor White $LastUser.OfficePhone
           }
 
-          Else{
+          Else
+          {
             Write-Host -ForegroundColor White "N/A"
           }
 
           Write-Host -NoNewLine "Email".PadRight(17)
           Write-Host -NoNewLine -ForegroundColor Red " : "
 
-          If($LastUser.EmailAddress){
+          If($LastUser.EmailAddress)
+          {
             Write-Host -ForegroundColor White ($LastUser.EmailAddress).ToLower()
           }
 
-          Else{
+          Else
+          {
             Write-Host -ForegroundColor White "N/A"
           }
         }
 
-        Else{
+        Else
+        {
           Write-Host -NoNewLine "Last User".PadRight(17)
           Write-Host -NoNewLine -ForegroundColor Red " : "
           Write-Host -ForegroundColor White $LastUser.ToLower()
@@ -206,7 +242,8 @@ Function Get-SystemInfo{
         Write-Host -ForegroundColor Cyan "MAC Addresses"
         Write-Host ""
 
-        ForEach($MAC in $MAC){
+        ForEach($MAC in $MAC)
+        {
           Write-Host -NoNewLine $MAC.MacAddress
           Write-Host -NoNewLine -ForegroundColor Red " : "
           Write-Host -ForegroundColor White $MAC.Description
@@ -216,7 +253,8 @@ Function Get-SystemInfo{
         Write-Host -ForegroundColor Cyan "Network Printers"
         Write-Host ""
 
-        If($Printer){
+        If($Printer)
+        {
           ForEach ($Printer in $Printer){
             Write-Host -NoNewLine ($Printer.PortName).PadRight(17)
             Write-Host -NoNewLine -ForegroundColor Red " : "
@@ -224,28 +262,34 @@ Function Get-SystemInfo{
           }
         }
 
-        Else{
+        Else
+        {
           Write-Host -NoNewLine -ForegroundColor Yellow "Host "
           Write-Host -NoNewLine -ForegroundColor White $Computer.ToLower()
           Write-Host -ForegroundColor Yellow " does not have any installed network printers."
         }
       }
-      Catch{
+      Catch
+      {
         Write-Host ""
         Write-Host -ForegroundColor Cyan "System Information"
         Write-Host ""
         Write-Host -NoNewLine "Name".PadRight(17)
         Write-Host -NoNewLine -ForegroundColor Red " : "
-        If($IP.IPAddress){
+        If($IP.IPAddress)
+        {
           Write-Host -ForegroundColor White $Computer.ToLower()
         }
 
-        Else{
-          If(($IP.NameHost).IndexOf(".") -gt 0){
+        Else
+        {
+          If(($IP.NameHost).IndexOf(".") -gt 0)
+          {
             Write-Host -ForegroundColor White (($IP.NameHost).Substring(0, ($IP.NameHost).IndexOf("."))).ToLower()
           }
 
-          Else{
+          Else
+          {
             Write-Host -ForegroundColor White ($IP.NameHost).ToLower()
           }
         }
@@ -253,11 +297,13 @@ Function Get-SystemInfo{
         Write-Host -NoNewLine "IP".PadRight(17)
         Write-Host -NoNewLine -ForegroundColor Red " : "
 
-        If($IP.IPAddress){
+        If($IP.IPAddress)
+        {
           Write-Host -ForegroundColor White $IP.IPAddress
         }
 
-        Else{
+        Else
+        {
           Write-Host -ForegroundColor White $Computer.ToLower()
         }
 
@@ -268,7 +314,8 @@ Function Get-SystemInfo{
       }
     }
 
-    Catch{
+    Catch
+    {
         Write-Host ""
         Write-Host -NoNewLine -ForegroundColor Yellow "Host "
         Write-Host -NoNewLine -ForegroundColor White $Computer.ToLower()
@@ -276,11 +323,14 @@ Function Get-SystemInfo{
     }
   }
 
-  Else{
-    Try{
+  Else
+  {
+    Try
+    {
       $IP = Resolve-DNSName -ErrorAction Stop -Name $Computer | Select -Property IPAddress,NameHost
 
-      If($IP.IPAddress){
+      If($IP.IPAddress)
+      {
         Write-Host ""
         Write-Host -ForegroundColor Cyan "System Information"
         Write-Host ""
@@ -289,7 +339,8 @@ Function Get-SystemInfo{
         Write-Host -ForegroundColor White $Computer.ToLower()
       }
 
-      Else{
+      Else
+      {
         If(($IP.NameHost).IndexOf(".") -gt 0){
           Write-Host ""
           Write-Host -ForegroundColor Cyan "System Information"
@@ -299,7 +350,8 @@ Function Get-SystemInfo{
           Write-Host -ForegroundColor White (($IP.NameHost).Substring(0, ($IP.NameHost).IndexOf("."))).ToLower()
         }
 
-        Else{
+        Else
+        {
           Write-Host ""
           Write-Host -ForegroundColor Cyan "System Information"
           Write-Host ""
@@ -312,11 +364,13 @@ Function Get-SystemInfo{
       Write-Host -NoNewLine "IP".PadRight(17)
       Write-Host -NoNewLine -ForegroundColor Red " : "
 
-      If($IP.IPAddress){
+      If($IP.IPAddress)
+      {
         Write-Host -ForegroundColor White $IP.IPAddress
       }
 
-      Else{
+      Else
+      {
         Write-Host -ForegroundColor White $Computer.ToLower()
       }
 
@@ -326,7 +380,8 @@ Function Get-SystemInfo{
       Write-Host -ForegroundColor Yellow " has a DNS record, but it is currently offline."
     }
 
-    Catch{
+    Catch
+    {
       Write-Host ""
       Write-Host -NoNewLine -ForegroundColor Yellow "Host "
       Write-Host -NoNewLine -ForegroundColor White $Computer.ToLower()
@@ -334,4 +389,3 @@ Function Get-SystemInfo{
     }
   }
 }
-
