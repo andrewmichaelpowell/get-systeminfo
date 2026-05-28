@@ -1,7 +1,5 @@
-# ++++++++++++++++++++++++++++++++++++
-# +  Get-SystemInfo                  +
-# +  github.com/andrewmichaelpowell  +
-# ++++++++++++++++++++++++++++++++++++
+# Get-SystemInfo
+# github.com/andrewmichaelpowell
 
 If(-Not(Get-Module -Name "ActiveDirectory")){
   If(Get-Module -ListAvailable -Name "ActiveDirectory"){
