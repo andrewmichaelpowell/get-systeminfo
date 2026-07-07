@@ -19,5 +19,5 @@ Location
 Department  
 Phone  
 Email  
-Mac Addresses  
+MAC Addresses  
 Network Printers  
