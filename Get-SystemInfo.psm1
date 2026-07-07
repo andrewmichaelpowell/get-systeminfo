@@ -22,7 +22,7 @@ Function Get-SystemInfo {
 
   If(Test-Connection -ComputerName $Computer -Count 1 -Quiet) {
     Try {
-      $IP = Resolve-DNSName -ErrorAction Stop -Name $Computer | Select -Property IPAddress,NameHost
+      $IP = Resolve-DNSName -ErrorAction Stop -Name $Computer | Select-Object -Property IPAddress,NameHost
 
       Try {
         $Model = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Class Win32_ComputerSystem | Select-Object -Property Model
@@ -51,8 +51,8 @@ Function Get-SystemInfo {
           }
         }
 
-        $MAC = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Class Win32_NetworkAdapterConfiguration | Select-Object -Property MacAddress,Description | Where -Property MacAddress -Like "*:*:*:*:*:*"
-        $Printer = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Class Win32_Printer | Select-Object -Property PortName,Name | Where -Property PortName -Like "*.*.*.*"
+        $MAC = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Class Win32_NetworkAdapterConfiguration | Select-Object -Property MacAddress,Description | Where-Object -Property MacAddress -Like "*:*:*:*:*:*"
+        $Printer = Get-WmiObject -ErrorAction Stop -ComputerName $Computer -Class Win32_Printer | Select-Object -Property PortName,Name | Where-Object -Property PortName -Like "*.*.*.*"
 
         Write-Host ""
         Write-Host -ForegroundColor Cyan "System Information"
@@ -276,7 +276,7 @@ Function Get-SystemInfo {
 
   Else {
     Try {
-      $IP = Resolve-DNSName -ErrorAction Stop -Name $Computer | Select -Property IPAddress,NameHost
+      $IP = Resolve-DNSName -ErrorAction Stop -Name $Computer | Select-Object -Property IPAddress,NameHost
 
       If($IP.IPAddress) {
         Write-Host ""
